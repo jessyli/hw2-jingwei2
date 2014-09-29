@@ -1,0 +1,7 @@
+Not Mac
+Error file: /home/jessyli/workspace/hw2-jingwei2/grading_hw1_2/report.txt
+SCRIPT_DIR=/home/jessyli/workspace/hw2-jingwei2/grading_hw1_2/.
+Student: P00001606T0076|16, input file: 37|alkaline,  output file: phosphatases  CPE file: 
+ls: cannot access /home/jessyli/.m2/repository/edu/cmu/lti/11791/f14/hw2//hw2-P00001606T0076|16/*/*.pom: No such file or directory
+P00001606T0076|16 ERROR can't find POM
+Stopping after a failure!

@@ -22,12 +22,16 @@ import uima.types.OutputGene;
  */
 public class CASConsumer extends CasConsumer_ImplBase {
 
+
+  static final String PARAM_MODEL_FILE = "f";
+
   PrintWriter outer = null;
 
   @Override
   public void initialize() throws ResourceInitializationException {
+    String modelFilePath = (String) getConfigParameterValue(PARAM_MODEL_FILE);
     try {
-      File f = new File("hw2-jingwei2.out");
+      File f = new File(modelFilePath);
       outer = new PrintWriter(new FileWriter(f));
     } catch (Exception e) {
 
@@ -64,7 +68,6 @@ public class CASConsumer extends CasConsumer_ImplBase {
       begin = annotation.getBegin();
       end = annotation.getEnd();
       outer.println(key + "|" + begin + " " + end + "|" + geneName);
-     // System.out.println("$$$$$$$$$$$$$$$$$$$$$$");
     }
     
   }

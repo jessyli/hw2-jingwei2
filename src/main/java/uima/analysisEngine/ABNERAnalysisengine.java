@@ -11,9 +11,10 @@ import org.apache.uima.resource.ResourceInitializationException;
 import uima.types.Abnerdata;
 import uima.types.InputData;
 import abner.Tagger;
+
 /**
- * using the Abner tool to get the gene name and position informations. Using the protein and DNA data as output data.
- *  * @author root
+ * using the Abner tool to get the gene name and position informations. Using the protein and DNA
+ * data as output data. * @author root
  *
  */
 public class ABNERAnalysisengine extends JCasAnnotator_ImplBase {
@@ -54,10 +55,12 @@ public class ABNERAnalysisengine extends JCasAnnotator_ImplBase {
 
           int begin;
           int end;
-
+          // gene = gene.replaceAll(gene, documentText);
           begin = documentText.indexOf(gene, overallStart);
           end = begin + gene.length();
           overallStart = end;
+
+//          int[] obj = countSpace(gene, begin, end);
 
           Abnerdata abnerann = new Abnerdata(aJCas);
           abnerann.setGene(gene);
@@ -72,3 +75,17 @@ public class ABNERAnalysisengine extends JCasAnnotator_ImplBase {
 
   }
 }
+
+//  private int[] countSpace(String str, int start, int end) {
+//    int[] result = new int[2];
+//    for (int i = 0; i < str.length(); i++) {
+//      if (str.charAt(i) == ' ') {
+//        if (i < start)
+//          result[0]++;
+//        if (i < end)
+//          result[1]++;
+//      }
+//    }
+//    return result;
+//  }
+//}

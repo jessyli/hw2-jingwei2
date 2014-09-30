@@ -1,12 +1,10 @@
 package uima.CASConsumer;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,8 +21,11 @@ import org.apache.uima.resource.ResourceProcessException;
 
 import uima.types.InputData;
 import uima.types.OutputGene;
+
 /**
- * evaluate the output data with the sample out data to get the precision, recall and F score of the output data
+ * evaluate the output data with the sample out data to get the precision, recall and F score of the
+ * output data
+ * 
  * @author root
  *
  */
@@ -49,14 +50,15 @@ public class Evaluation extends CasConsumer_ImplBase {
     answer = new HashMap<String, Set<String>>();
 
     String answerPath = (String) configParameterValue;
-    URL resource = Evaluation.class.getClassLoader().getResource(answerPath);
+    // URL resource = Evaluation.class.getClassLoader().getResource(answerPath);
+    InputStream resourceAsStream = Evaluation.class.getClassLoader()
+            .getResourceAsStream(answerPath);
     BufferedReader reader = null;
     try {
-      reader = new BufferedReader(new InputStreamReader(new FileInputStream(resource.getFile()),
-              "utf-8"));
+      // AbstractExternalizable.readResourceObject(arg0)
+
+      reader = new BufferedReader(new InputStreamReader(resourceAsStream, "utf-8"));
     } catch (UnsupportedEncodingException e1) {
-      e1.printStackTrace();
-    } catch (FileNotFoundException e1) {
       e1.printStackTrace();
     }
     String line = null;
@@ -104,7 +106,7 @@ public class Evaluation extends CasConsumer_ImplBase {
 
     Set<String> answerSet = answer.get(key);
 
-    if(null != answerSet) {
+    if (null != answerSet) {
       int currentHit = 0;
       while (iter1.hasNext()) {
         OutputGene out = (OutputGene) iter1.next();
@@ -131,7 +133,7 @@ public class Evaluation extends CasConsumer_ImplBase {
    * @param falseHit
    * @param missHit
    */
-  
+
   private static void printBenchmark(int hit, int falseHit, int missHit) {
     double precision = (double) hit / (hit + falseHit);
     double recall = (double) hit / (hit + missHit);

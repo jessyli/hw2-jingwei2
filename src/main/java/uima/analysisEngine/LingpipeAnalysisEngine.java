@@ -18,8 +18,11 @@ import uima.types.Lingpipedata;
 import com.aliasi.chunk.Chunk;
 import com.aliasi.chunk.Chunker;
 import com.aliasi.util.AbstractExternalizable;
+
 /**
- * Using the lingpipe tool to analysis the data and pick the name of gene and the position informations.
+ * Using the lingpipe tool to analysis the data and pick the name of gene and the position
+ * informations.
+ * 
  * @author root
  *
  */
@@ -34,9 +37,8 @@ public class LingpipeAnalysisEngine extends JCasAnnotator_ImplBase {
   public void initialize(UimaContext aContext) throws ResourceInitializationException {
     String modelFilePath = (String) aContext.getConfigParameterValue(PARAM_MODEL_FILE);
 
-    File modelFile = new File(modelFilePath);
     try {
-      chunker = (Chunker) AbstractExternalizable.readObject(modelFile);
+      chunker = (Chunker) AbstractExternalizable.readResourceObject(modelFilePath);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (ClassNotFoundException e) {
@@ -48,12 +50,12 @@ public class LingpipeAnalysisEngine extends JCasAnnotator_ImplBase {
 
   @Override
   public void process(JCas aJCas) throws AnalysisEngineProcessException {
-    String key = null;
-    FSIterator<Annotation> iterator = aJCas.getAnnotationIndex(InputData.type).iterator();
-    if (iterator.hasNext()) {
-      InputData data = (InputData) iterator.next();
-      key = data.getKey();
-    }
+    // String key = null;
+    // FSIterator<Annotation> iterator = aJCas.getAnnotationIndex(InputData.type).iterator();
+    // if (iterator.hasNext()) {
+    // InputData data = (InputData) iterator.next();
+    // key = data.getKey();
+    // }
 
     FSIterator<Annotation> it = aJCas.getAnnotationIndex(InputData.type).iterator();
 
@@ -70,6 +72,8 @@ public class LingpipeAnalysisEngine extends JCasAnnotator_ImplBase {
       int end = chunk.end();
       String phrase = documentText.substring(start, end);
 
+//      int[] count = countSpace(documentText, start, end);
+
       Lingpipedata lingpipe = new Lingpipedata(aJCas);
       lingpipe.setGene(phrase);
       lingpipe.setBegin(start);
@@ -79,4 +83,17 @@ public class LingpipeAnalysisEngine extends JCasAnnotator_ImplBase {
     }
 
   }
+
+//  private int[] countSpace(String str, int start, int end) {
+//    int[] result = new int[2];
+//    for (int i = 0; i < str.length(); i++) {
+//      if (str.charAt(i) == ' ') {
+//        if (i < start)
+//          result[0]++;
+//        if (i < end)
+//          result[1]++;
+//      }
+//    }
+//    return result;
+//  }
 }

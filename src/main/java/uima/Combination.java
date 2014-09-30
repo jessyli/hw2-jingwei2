@@ -71,29 +71,46 @@ public class Combination extends JCasAnnotator_ImplBase {
         start = i;
       } else if (current > next) {
         if (previous_order != -1) {
-          _annotateOutputGene(jcas, start, i, content.substring(start, i));
+          _annotateOutputGene(jcas, start, i, content);
           previous_order = -1;
         }
       }
       current = next;
 
     }
-
+    
 
   }
 
   public void destroy() {
     super.destroy();
   }
+  
+  private int[] countSpace(String str, int start, int end) {
+    int[] result = new int[2];
+    for (int i = 0; i < str.length(); i++) {
+      if (str.charAt(i) == ' ') {
+        if (i < start)
+          result[0]++;
+        if (i < end)
+          result[1]++;
+      }
+    }
+    return result;
+  }
 
-  private void _annotateOutputGene(JCas aJCas, int start, int end, String gene) {
+  private void _annotateOutputGene(JCas aJCas, int start, int end, String content) {
+   
     OutputGene obj = new OutputGene(aJCas);
-    obj.setBegin(start);
-    obj.setEnd(end);
-    obj.setContent(gene);
+    int[] count = countSpace(content, start, end);
+
+    
+    obj.setBegin(start - count[0]);
+    obj.setEnd(end - count[1] - 1);
+    obj.setContent(content.substring(start, end));
     obj.addToIndexes();
 
-    System.out.println("[Combine][add annotation]" + start + "\t" + end + "\t" + gene);
+//    System.out.println("[Combine][add annotation]" + start + "\t" + end + "\t" + gene);
   }
 
 }
